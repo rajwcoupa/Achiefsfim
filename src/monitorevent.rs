@@ -30,7 +30,8 @@ pub struct MonitorEvent {
   pub detailed_operation: String,
   pub checksum: String,
   pub fpid: u32,
-  pub system: String
+  pub system: String,
+  pub user: String
 }
 
 
@@ -51,7 +52,8 @@ impl Event for MonitorEvent {
           "file": String::from(self.path.clone().to_str().unwrap()),
           "file_size": self.size.clone(),
           "checksum": self.checksum.clone(),
-          "system": self.system.clone()
+          "system": self.system.clone(),
+          "user": self.user.clone()
       });
       to_string(&obj).unwrap()
   }
@@ -73,7 +75,8 @@ impl Event for MonitorEvent {
           detailed_operation: self.detailed_operation.clone(),
           checksum: self.checksum.clone(),
           fpid: self.fpid,
-          system: self.system.clone()
+          system: self.system.clone(),
+          user: self.user.clone()
       }
   }
 
@@ -118,7 +121,8 @@ impl Event for MonitorEvent {
                     "file": String::from(self.path.clone().to_str().unwrap()),
                     "file_size": self.size.clone(),
                     "checksum": self.checksum.clone(),
-                    "system": self.system.clone()
+                    "system": self.system.clone(),
+                    "user": self.user.clone()
                 }),
                 "index": "fim_events"
             });
@@ -152,7 +156,8 @@ impl Event for MonitorEvent {
                 "file": String::from(self.path.clone().to_str().unwrap()),
                 "file_size": self.size.clone(),
                 "checksum": self.checksum.clone(),
-                "system": self.system.clone()
+                "system": self.system.clone(),
+                "user": self.user.clone()
             });
             let request_url = format!("{}/{}/_doc/{}", cfg.endpoint_address, index, self.id);
             let client = Client::builder()
@@ -194,6 +199,7 @@ impl Event for MonitorEvent {
             "detailed_operation" => self.detailed_operation.clone(),
             "checksum" => self.checksum.clone(),
             "system" => self.system.clone(),
+            "user" => self.user.clone(),
             _ => "".to_string()
         }
     }
@@ -264,7 +270,8 @@ mod tests {
             detailed_operation: "CREATE_FILE".to_string(),
             checksum: "UNKNOWN".to_string(),
             fpid: 0,
-            system: "test".to_string()
+            system: "test".to_string(),
+            user: "test_user".to_string()
         }
     }
 
@@ -288,6 +295,7 @@ mod tests {
         assert_eq!(event.checksum, cloned.checksum);
         assert_eq!(event.fpid, cloned.fpid);
         assert_eq!(event.system, cloned.system);
+        assert_eq!(event.user, cloned.user);
     }
 
     // ------------------------------------------------------------------------
@@ -307,6 +315,7 @@ mod tests {
         assert_eq!(evt.detailed_operation, String::from("CREATE_FILE"));
         assert_eq!(evt.fpid, 0);
         assert_eq!(evt.system, String::from("test"));
+        assert_eq!(evt.user, String::from("test_user"));
     }
 
     // ------------------------------------------------------------------------
@@ -465,7 +474,7 @@ mod tests {
             \"file\":\"\",\"file_size\":0,\"fpid\":0,\
             \"hostname\":\"Hostname\",\"id\":\"Test_id\",\"labels\":[],\
             \"node\":\"FIM\",\"operation\":\"CREATE\",\"system\":\"test\",\
-            \"timestamp\":\"Timestamp\",\"version\":\"x.x.x\"}";
+            \"timestamp\":\"Timestamp\",\"user\":\"test_user\",\"version\":\"x.x.x\"}";
         assert_eq!(create_test_event().format_json(), expected);
     }
 
@@ -483,7 +492,7 @@ mod tests {
             \"hostname\":\"Hostname\",\"id\":\"Test_id\",\"labels\":[],\
             \"node\":\"FIM\",\"operation\":\"CREATE\",\
             \"system\":\"test\",\
-            \"timestamp\":\"Timestamp\",\"version\":\"x.x.x\"}\n";
+            \"timestamp\":\"Timestamp\",\"user\":\"test_user\",\"version\":\"x.x.x\"}\n";
         assert_eq!(contents.unwrap(), expected);
         remove_test_file(filename.clone());
     }

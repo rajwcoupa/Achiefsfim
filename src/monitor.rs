@@ -286,7 +286,8 @@ pub async fn monitor(
                                     detailed_operation: event::get_detailed_operation(kind),
                                     checksum: hash::get_checksum( String::from(path.to_str().unwrap()), cfg.clone().events_max_file_checksum ),
                                     fpid: utils::get_pid(),
-                                    system: cfg.clone().system
+                                    system: cfg.clone().system,
+                                    user: utils::get_current_user()
                                 };
 
                                 debug!("Event processed: {:?}", event);
