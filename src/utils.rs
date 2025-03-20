@@ -236,6 +236,23 @@ pub fn get_file_size(filename: &str) -> u64 {
 }
 
 // ----------------------------------------------------------------------------
+// Function to get current user name
+
+pub fn get_current_user() -> String {
+    if cfg!(target_os = "windows") {
+        match std::env::var("USERNAME") {
+            Ok(username) => username,
+            Err(_) => String::from("unknown")
+        }
+    } else {
+        match std::env::var("USER") {
+            Ok(username) => username,
+            Err(_) => String::from("unknown")
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
 
 pub fn get_audit_rule_permissions(value: Option<&str>) -> String {
     let mut rule: String = String::new();
