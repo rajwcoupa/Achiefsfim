@@ -25,16 +25,9 @@ jobs:
         working-directory: ./pkg/msi
       - run: echo "Job's status is ${{ job.status }}."
 
-  Pkg-build-ubuntu16:
-    runs-on: [self-hosted, ubuntu18]
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Ubuntu 16.04 - Package build
-        run: sudo docker run --rm okynos/fim-builder:xenial ${{ github.ref_name }}
-
   Pkg-build-centos7:
-    runs-on: [self-hosted, ubuntu18]
+    runs-on:
+      group: Default
     steps:
       - name: Check out code
         uses: actions/checkout@v2
